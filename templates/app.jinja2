@@ -67,7 +67,7 @@
     <body>
 
       <div class="center-container">
-        <div class="w3-white" style="width: 1500px;">
+        <div class="w3-white" style="width: 800px;">
         
             <!-- Header -->
             <div style="text-align: center;">
@@ -92,7 +92,11 @@
                 <input type="text" id="search" name="search" placeholder="Enter software name..." style="width: 50%">
                 <input type="submit" value="Search">
             </form>
+            <br/>
           
+            {% for software in software_list %}
+                <p style="text-align: center;">{{ software[:-1] }}</p>
+            {% endfor %}
         </div>
       </div>
 
