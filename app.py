@@ -3,8 +3,10 @@ import webbrowser
 import flask
 import os
 import requests
+import subprocess
 from bs4 import BeautifulSoup
 from distutils.version import StrictVersion
+from shlex import quote
 
 
 def str_to_bool(str):
@@ -43,6 +45,16 @@ def versions(software_name):
         version[len(prefix) :] for version in all_versions if version.startswith(prefix)
     ]
     return flask.render_template("versions.jinja2", software_name=software_name, all_versions=all_versions)
+
+
+@app.route("/download/<software_name>/<software_version>")
+def download(software_name, software_version):
+    url = FS_URL + software_name + "/" + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
+    cmd = f"wget -O {software_name.lower()}_{software_version}.sif {url}"
+    run_term_cmd(cmd)
+    cmd = f"mv {software_name.lower()}_{software_version}.sif /home/ubuntu/Downloads"
+    run_term_cmd(cmd)
+    return "OK"
 
 
 def get_software_info(search_term=None):
@@ -111,6 +123,15 @@ def get_all_versions_of_software(software):
                 versions.append(href[:-1])
     versions = versions[1:] # remove ../
     return versions
+
+
+def run_term_cmd(cmd):
+    term_cmd = f"bash -c {quote(cmd)}"
+    logging.info(term_cmd)
+    try:
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True)
+    except subprocess.CalledProcessError as e:
+        print("Command execution failed:", e)
 
 
 def main():
