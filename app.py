@@ -61,9 +61,9 @@ def get_software_list():
         for link in soup.find_all("a"):
             href = link.get("href")
             if href.endswith("/"):
-                softwares.append(href)
-        softwares.remove("misc/")
-        softwares = softwares[1:]
+                softwares.append(href[:-1])
+        softwares.remove("misc") # remove misc/ TODO: put misc in another directory on file server
+        softwares = softwares[1:] # remove ../
     else:
         print(f"Error: Unable to retrieve content from {FS_URL}")
     return softwares
@@ -84,7 +84,8 @@ def get_latest_software_version(response, software_name):
     for link in soup.find_all("a"):
         href = link.get("href")
         if href.endswith("/"):
-            all_versions.append(href)
+            all_versions.append(href[:-1])
+    all_versions = all_versions[1:] # remove ../
 
     prefix = software_name + "-"
     filtered_versions = [
