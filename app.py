@@ -24,7 +24,7 @@ app = flask.Flask(__name__)
 
 
 @app.route("/")
-def myapp():
+def index():
     software_info = get_software_info()
     return flask.render_template("app.jinja2", software_info=software_info)
 
@@ -49,12 +49,13 @@ def versions(software_name):
 
 @app.route("/download/<software_name>/<software_version>")
 def download(software_name, software_version):
+    source_url = flask.request.args.get("source_url") or "index"
     url = FS_URL + software_name + "/" + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
     cmd = f"wget -O {software_name.lower()}_{software_version}.sif {url}"
     run_term_cmd(cmd)
     cmd = f"mv {software_name.lower()}_{software_version}.sif /home/ubuntu/Downloads"
     run_term_cmd(cmd)
-    return "OK"
+    return flask.redirect(flask.url_for(source_url))
 
 
 def get_software_info(search_term=None):
