@@ -33,6 +33,11 @@ def search():
     software_info = get_software_info(search_term)
     return flask.render_template("app.jinja2", software_info=software_info)
 
+@app.route("/versions/<software_name>")
+def versions(software_name):
+    all_versions = get_all_versions_of_software(software_name)
+    return flask.render_template("versions.jinja2", software_name=software_name, all_versions=all_versions)
+
 
 def get_software_info(search_term=None):
     software_list = get_software_list()

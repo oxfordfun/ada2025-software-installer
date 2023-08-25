@@ -1,0 +1,19 @@
+{% extends 'base.jinja2' %}
+{% block content %}
+    <!-- Title -->
+    <h1 class="uppercase" style="text-align: center;"><b>{{ software_name }}</b></h1>
+
+    <!-- Version list -->
+    {% for version in all_versions %}
+        <div class="w3-card w3-padding w3-round w3-animate-opacity" style="margin-top: 20px; display: flex;">
+            <div style="width: 83%">
+                <p class="card-text">{{ version }}</p>
+            </div>
+            <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto;">
+                <a class="download-button-container">
+                    <i class="fa-regular fa-circle-down icon"></i>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
