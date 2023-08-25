@@ -16,7 +16,7 @@ def str_to_bool(str):
 HOST = os.getenv("ADA2025_SI_HOST") or "127.0.0.1"
 PORT = os.getenv("ADA2025_SI_PORT") or 7322
 DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
-FS_URL = os.getenv("ADA2025_SI_FS_URL") or "https://ada-files.oxfordfun.com/software/"
+FS_URL = os.getenv("ADA2025_SI_FS_URL") or "https://ada-files.oxfordfun.com/software/containers/" # make sure this ends in a "/"
 
 app = flask.Flask(__name__)
 
@@ -73,7 +73,6 @@ def get_software_list():
             href = link.get("href")
             if href.endswith("/"):
                 softwares.append(href[:-1])
-        softwares.remove("misc") # remove misc/ TODO: put misc in another directory on file server
         softwares = softwares[1:] # remove ../
     else:
         print(f"Error: Unable to retrieve content from {FS_URL}")
