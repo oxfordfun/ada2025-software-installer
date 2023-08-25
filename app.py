@@ -35,6 +35,8 @@ def search():
 
 @app.route("/versions/<software_name>")
 def versions(software_name):
+    if (not software_name) or (software_name not in get_software_list()):
+        return flask.redirect(flask.url_for("myapp"))
     all_versions = get_all_versions_of_software(software_name)
     return flask.render_template("versions.jinja2", software_name=software_name, all_versions=all_versions)
 
