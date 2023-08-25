@@ -72,20 +72,12 @@ def get_software_list():
 def get_all_latest_software_versions(software_list):
     latest_versions = []
     for software in software_list:
-        response = requests.get(FS_URL + f"/{software}")
-        if response.status_code == 200:
-            latest_versions.append(get_latest_software_version(response, software))
+        latest_versions.append(get_latest_software_version(software))
     return latest_versions
 
 
-def get_latest_software_version(response, software_name):
-    all_versions = []
-    soup = BeautifulSoup(response.content, "html.parser")
-    for link in soup.find_all("a"):
-        href = link.get("href")
-        if href.endswith("/"):
-            all_versions.append(href[:-1])
-    all_versions = all_versions[1:] # remove ../
+def get_latest_software_version(software_name):
+    all_versions = get_all_versions_of_software(software_name)
 
     prefix = software_name + "-"
     filtered_versions = [
@@ -93,9 +85,22 @@ def get_latest_software_version(response, software_name):
     ]
 
     if not filtered_versions:
-        return "N/A"
+        return "None"
 
     return max(filtered_versions, key=StrictVersion)
+
+
+def get_all_versions_of_software(software):
+    versions = []
+    response = requests.get(FS_URL + f"/{software}")
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, "html.parser")
+        for link in soup.find_all("a"):
+            href = link.get("href")
+            if href.endswith("/"):
+                versions.append(href[:-1])
+    versions = versions[1:] # remove ../
+    return versions
 
 
 def main():
