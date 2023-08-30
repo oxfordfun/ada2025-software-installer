@@ -55,7 +55,10 @@ def download(software_name, software_version):
     cmd = f"wget -O {path} {url}"
     run_term_cmd(cmd)
     flask.flash(f"{software_name} {software_version} downloaded to {path}")
-    return flask.redirect(flask.url_for(source_url))
+    if source_url == "versions":
+        return flask.redirect(flask.url_for(source_url, software_name=software_name))
+    else:
+        return flask.redirect(flask.url_for(source_url))
 
 
 def get_software_info(search_term=None):
