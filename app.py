@@ -25,6 +25,7 @@ FS_URL = (
     os.getenv("ADA2025_SI_FS_URL")
     or "https://ada-files.oxfordfun.com/software/containers/"
 )  # make sure this ends in a "/"
+DL_PATH = os.getenv("ADA2025_SI_DL_PATH") or "/home/ubuntu/Downloads/" # make sure this ends in a "/"
 
 
 def gen_token(length):
@@ -78,7 +79,7 @@ def download(software_name, software_version):
         + "/"
         + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
     )
-    path = f"/home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif"
+    path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
     cmd = f"wget -O {path} {url}"
     threading.Thread(target=run_term_cmd, args=(cmd, ))
     flask.flash(f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete.")
