@@ -7,6 +7,19 @@
             <input type="submit" value="Search">
         </form>
         <br/>
+
+        <!-- Flashed messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+                {% if category == "danger" %}
+                <p class="w3-red w3-padding-large w3-round">{{ message }}</p>
+                {% else %}
+                <p class="w3-green w3-padding-large w3-round">{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+        {% endwith %}
         
         <!-- Software list -->
         {% for software in software_info %}
