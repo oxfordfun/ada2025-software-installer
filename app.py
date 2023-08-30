@@ -154,7 +154,7 @@ def get_latest_software_version(software_name):
     ]
 
     if not filtered_versions:
-        return "None"
+        return ""
 
     return max(filtered_versions, key=StrictVersion)
 
