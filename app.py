@@ -1,6 +1,7 @@
 import logging
 import webbrowser
 import string
+import threading
 import secrets
 import flask
 import os
@@ -79,8 +80,8 @@ def download(software_name, software_version):
     )
     path = f"/home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif"
     cmd = f"wget -O {path} {url}"
-    run_term_cmd(cmd)
-    flask.flash(f"{software_name} {software_version} downloaded to {path}")
+    threading.Thread(target=run_term_cmd, args=(cmd, ))
+    flask.flash(f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete.")
     if source_url == "versions":
         return flask.redirect(flask.url_for(source_url, software_name=software_name))
     else:
