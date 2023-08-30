@@ -11,6 +11,11 @@ from bs4 import BeautifulSoup
 from distutils.version import StrictVersion
 from shlex import quote
 
+logging.basicConfig(
+    level=logging.DEBUG,
+    datefmt="%Y-%m-%d/%H:%M:%S",
+    format="%(asctime)s %(message)s",
+)
 
 def str_to_bool(str):
     if str == "True":
@@ -74,6 +79,7 @@ def versions(software_name):
 
 @app.route("/download/<software_name>/<software_version>")
 def download(software_name, software_version):
+    logging.info(f"Downloading {software_name} {software_version}")
     source_url = flask.request.args.get("source_url") or "index"
     url = (
         FS_URL
@@ -94,13 +100,15 @@ def download(software_name, software_version):
 
 
 def get_software_info(search_term=None):
+    logging.info(f"Getting info for all available software.")
     software_list = get_software_list()
     if search_term:
         software_list = find_items_with_string(software_list, search_term)
     version_list = get_all_latest_software_versions(software_list)
     software_info = []
     for i in range(0, len(software_list)):
-        software_info.append([software_list[i], version_list[i]])
+        if version_list[i]:
+            software_info.append([software_list[i], version_list[i]])
     return software_info
 
 
@@ -113,6 +121,7 @@ def find_items_with_string(arr, search_string):
 
 
 def get_software_list():
+    logging.info(f"Retrieving software list from {FS_URL}")
     response = requests.get(FS_URL)
     softwares = []
     if response.status_code == 200:
@@ -123,11 +132,12 @@ def get_software_list():
                 softwares.append(href[:-1])
         softwares = softwares[1:]  # remove ../
     else:
-        print(f"Error: Unable to retrieve content from {FS_URL}")
+        logging.error(f"Error: Unable to retrieve content from {FS_URL}")
     return softwares
 
 
 def get_all_latest_software_versions(software_list):
+    logging.info("Determining latest versions for each piece of software")
     latest_versions = []
     for software in software_list:
         latest_versions.append(get_latest_software_version(software))
@@ -135,6 +145,7 @@ def get_all_latest_software_versions(software_list):
 
 
 def get_latest_software_version(software_name):
+    logging.info(f"Getting latest software version for {software_name}")
     all_versions = get_all_versions_of_software(software_name)
 
     prefix = software_name + "-"
@@ -149,6 +160,7 @@ def get_latest_software_version(software_name):
 
 
 def get_all_versions_of_software(software):
+    logging.info(f"Getting list of all available versions of {software}")
     versions = []
     response = requests.get(FS_URL + f"/{software}")
     if response.status_code == 200:
@@ -169,7 +181,7 @@ def run_term_cmd(cmd):
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True
         )
     except subprocess.CalledProcessError as e:
-        print("Command execution failed:", e)
+        logging.exception("Command execution failed:", e)
 
 
 def main():
