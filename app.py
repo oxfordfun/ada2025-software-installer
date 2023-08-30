@@ -87,7 +87,7 @@ def download(software_name, software_version):
         + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
     )
     path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
-    cmd = f"wget -O {path} {url}"
+    cmd = f"wget -O {path} {url} && chmod +x {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
     flask.flash(
         f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete."
