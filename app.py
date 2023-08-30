@@ -21,7 +21,7 @@ DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
 FS_URL = os.getenv("ADA2025_SI_FS_URL") or "https://ada-files.oxfordfun.com/software/containers/" # make sure this ends in a "/"
 
 app = flask.Flask(__name__)
-
+app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY")
 
 @app.route("/")
 def index():
@@ -51,8 +51,10 @@ def versions(software_name):
 def download(software_name, software_version):
     source_url = flask.request.args.get("source_url") or "index"
     url = FS_URL + software_name + "/" + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
-    cmd = f"wget -O /home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif {url}"
+    path = f"/home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif"
+    cmd = f"wget -O {path} {url}"
     run_term_cmd(cmd)
+    flask.flash(f"Software downloaded to {path}")
     return flask.redirect(flask.url_for(source_url))
 
 
