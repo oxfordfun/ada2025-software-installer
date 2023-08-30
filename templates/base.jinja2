@@ -112,8 +112,8 @@
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
         <script>
-            function downloadSoftware(software_name, software_version) {
-                        window.location.href = "/download/" + software_name + "/" + software_version
+            function downloadSoftware(software_name, software_version, source_location="index") {
+                        window.location.href = "/download/" + software_name + "/" + software_version + "?source_url=" + source_location
                     }       
         </script>
 
