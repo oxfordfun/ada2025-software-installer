@@ -20,7 +20,11 @@ def str_to_bool(str):
 HOST = os.getenv("ADA2025_SI_HOST") or "127.0.0.1"
 PORT = os.getenv("ADA2025_SI_PORT") or 7322
 DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
-FS_URL = os.getenv("ADA2025_SI_FS_URL") or "https://ada-files.oxfordfun.com/software/containers/" # make sure this ends in a "/"
+FS_URL = (
+    os.getenv("ADA2025_SI_FS_URL")
+    or "https://ada-files.oxfordfun.com/software/containers/"
+)  # make sure this ends in a "/"
+
 
 def gen_token(length):
     """
@@ -30,8 +34,12 @@ def gen_token(length):
     secure_string = "".join(secrets.choice(alphabet) for _ in range(length))
     return secure_string
 
+
 app = flask.Flask(__name__)
-app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_token(32)
+app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_token(
+    32
+)
+
 
 @app.route("/")
 def index():
@@ -45,6 +53,7 @@ def search():
     software_info = get_software_info(search_term)
     return flask.render_template("app.jinja2", software_info=software_info)
 
+
 @app.route("/versions/<software_name>")
 def versions(software_name):
     if (not software_name) or (software_name not in get_software_list()):
@@ -54,13 +63,20 @@ def versions(software_name):
     all_versions = [
         version[len(prefix) :] for version in all_versions if version.startswith(prefix)
     ]
-    return flask.render_template("versions.jinja2", software_name=software_name, all_versions=all_versions)
+    return flask.render_template(
+        "versions.jinja2", software_name=software_name, all_versions=all_versions
+    )
 
 
 @app.route("/download/<software_name>/<software_version>")
 def download(software_name, software_version):
     source_url = flask.request.args.get("source_url") or "index"
-    url = FS_URL + software_name + "/" + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
+    url = (
+        FS_URL
+        + software_name
+        + "/"
+        + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
+    )
     path = f"/home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif"
     cmd = f"wget -O {path} {url}"
     run_term_cmd(cmd)
@@ -99,7 +115,7 @@ def get_software_list():
             href = link.get("href")
             if href.endswith("/"):
                 softwares.append(href[:-1])
-        softwares = softwares[1:] # remove ../
+        softwares = softwares[1:]  # remove ../
     else:
         print(f"Error: Unable to retrieve content from {FS_URL}")
     return softwares
@@ -135,7 +151,7 @@ def get_all_versions_of_software(software):
             href = link.get("href")
             if href.endswith("/"):
                 versions.append(href[:-1])
-    versions = versions[1:] # remove ../
+    versions = versions[1:]  # remove ../
     return versions
 
 
@@ -143,7 +159,9 @@ def run_term_cmd(cmd):
     term_cmd = f"bash -c {quote(cmd)}"
     logging.info(term_cmd)
     try:
-        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True)
+        result = subprocess.run(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True
+        )
     except subprocess.CalledProcessError as e:
         print("Command execution failed:", e)
 
