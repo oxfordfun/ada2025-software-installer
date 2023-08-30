@@ -34,19 +34,19 @@
                     </button>
                 </div>
                 <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto;">
-                    <button class="download-button-container">
+                    <button class="download-button-container" onclick="downloadSoftware('{{ software[0] }}','{{ software[1] }}')">
                         <i class="fa-regular fa-circle-down icon" style="font-size: 28px"></i>
                     </button>
                 </div>
             </div>
         {% endfor %}
-
-        <script>
-            function redirectToVersionsPage(software_name) {
-                // Use window.location.href to redirect to the desired page
-                window.location.href = "/versions/" + software_name;
-            }
-        </script>
-
     </body>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        function redirectToVersionsPage(software_name) {
+            window.location.href = "/versions/" + software_name;
+        }
+    </script>
 {% endblock %}
