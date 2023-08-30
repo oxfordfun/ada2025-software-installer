@@ -7,3 +7,4 @@
     python3 -m venv env
     source env/bin/activate
     pip3 install -r requirements.txt
+    cp ada2025-software-installer.desktop /home/ubuntu/Desktop/ # or wherever your desktop is (OPTIONAL STEP)
