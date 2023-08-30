@@ -54,7 +54,7 @@ def download(software_name, software_version):
     path = f"/home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif"
     cmd = f"wget -O {path} {url}"
     run_term_cmd(cmd)
-    flask.flash(f"Software downloaded to {path}")
+    flask.flash(f"{software_name} {software_version} downloaded to {path}")
     return flask.redirect(flask.url_for(source_url))
 
 
