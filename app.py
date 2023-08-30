@@ -172,4 +172,5 @@ def main():
 
 
 if __name__ == "__main__":
+    webbrowser.open_new_tab(f"http://{HOST}:{str(PORT)}/")
     main()
