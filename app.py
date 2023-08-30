@@ -1,5 +1,7 @@
 import logging
 import webbrowser
+import string
+import secrets
 import flask
 import os
 import requests
@@ -20,8 +22,16 @@ PORT = os.getenv("ADA2025_SI_PORT") or 7322
 DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
 FS_URL = os.getenv("ADA2025_SI_FS_URL") or "https://ada-files.oxfordfun.com/software/containers/" # make sure this ends in a "/"
 
+def gen_token(length):
+    """
+    Generate a cryptographically secure alphanumeric string of the given length.
+    """
+    alphabet = string.ascii_letters + string.digits
+    secure_string = "".join(secrets.choice(alphabet) for _ in range(length))
+    return secure_string
+
 app = flask.Flask(__name__)
-app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY")
+app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_token(32)
 
 @app.route("/")
 def index():
