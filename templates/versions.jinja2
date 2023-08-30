@@ -3,6 +3,19 @@
     <!-- Title -->
     <h1 class="uppercase" style="text-align: center;">ALL <b>{{ software_name }}</b> VERSIONS</h1>
 
+    <!-- Flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+            {% if category == "danger" %}
+            <p class="w3-red w3-padding-large w3-round">{{ message }}</p>
+            {% else %}
+            <p class="w3-green w3-padding-large w3-round">{{ message }}</p>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <!-- Version list -->
     {% for version in all_versions %}
         <div class="w3-card w3-padding w3-round w3-animate-opacity" style="margin-top: 20px; display: flex;">
@@ -10,9 +23,9 @@
                 <p class="card-text">v. <b>{{ version }}</b></p>
             </div>
             <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto;">
-                <a class="download-button-container">
+                <button class="download-button-container" onclick="downloadSoftware('{{ software_name }}','{{ version }}', 'versions')" title="Download version {{ version }}">
                     <i class="fa-regular fa-circle-down icon" style="font-size: 28px"></i>
-                </a>
+                </button>
             </div>
         </div>
     {% endfor %}
