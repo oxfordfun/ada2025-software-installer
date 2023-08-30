@@ -51,9 +51,7 @@ def versions(software_name):
 def download(software_name, software_version):
     source_url = flask.request.args.get("source_url") or "index"
     url = FS_URL + software_name + "/" + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
-    cmd = f"wget -O {software_name.lower()}_{software_version}.sif {url}"
-    run_term_cmd(cmd)
-    cmd = f"mv {software_name.lower()}_{software_version}.sif /home/ubuntu/Downloads"
+    cmd = f"wget -O /home/ubuntu/Downloads/{software_name.lower()}_{software_version}.sif {url}"
     run_term_cmd(cmd)
     return flask.redirect(flask.url_for(source_url))
 
