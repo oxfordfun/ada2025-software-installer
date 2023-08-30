@@ -160,7 +160,7 @@ def run_term_cmd(cmd):
     term_cmd = f"bash -c {quote(cmd)}"
     logging.info(term_cmd)
     try:
-        result = subprocess.run(
+        subprocess.run(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True
         )
     except subprocess.CalledProcessError as e:
