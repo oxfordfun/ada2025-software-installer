@@ -105,7 +105,7 @@ def download(software_name, software_version):
     url = FS_URL + software_name + f"/{software_name}-{software_version}/{software_name.lower()}_icon.png"
     path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
     cmd = f"sudo wget -O {path} {url}"
-    print(cmd)
+    logging.info(cmd)
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     if source_url == "versions":
