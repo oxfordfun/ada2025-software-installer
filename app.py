@@ -66,7 +66,7 @@ def search():
 @app.route("/versions/<software_name>")
 def versions(software_name):
     if (not software_name) or (software_name not in get_software_list()):
-        return flask.redirect(flask.url_for("myapp"))
+        return flask.redirect(flask.url_for("index"))
     all_versions = get_all_versions_of_software(software_name)
     prefix = software_name + "-"
     all_versions = [
