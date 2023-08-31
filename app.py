@@ -81,6 +81,8 @@ def versions(software_name):
 def download(software_name, software_version):
     logging.info(f"Downloading {software_name} {software_version}")
     source_url = flask.request.args.get("source_url") or "index"
+
+    # get software
     url = (
         FS_URL
         + software_name
@@ -92,6 +94,20 @@ def download(software_name, software_version):
     flask.flash(
         f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete."
     )
+
+    # get desktop item
+    url = FS_URL + software_name + f"/{software_name}-{software_version}/{software_name.lower()}_{software_version}.desktop"
+    path = f"/home/ubuntu/Desktop/"
+    cmd = f"wget -P {path} {url} && chmod +x {path}{software_name.lower()}_{software_version}.desktop"
+    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+
+    # get icon
+    url = FS_URL + software_name + f"/{software_name}-{software_version}/{software_name.lower()}_icon.png"
+    path = f"/usr/share/pixmaps/"
+    cmd = f"sudo wget -P {path} {url}"
+    print(cmd)
+    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+
     if source_url == "versions":
         return flask.redirect(flask.url_for(source_url, software_name=software_name))
     else:
@@ -173,12 +189,14 @@ def get_all_versions_of_software(software):
 
 
 def run_term_cmd(cmd):
-    term_cmd = f"bash -c {quote(cmd)}"
+    term_cmd = f"sudo bash -c {quote(cmd)}"
     logging.info(term_cmd)
     try:
-        subprocess.run(
+        result = subprocess.run(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, text=True
         )
+        logging.info(result.stdout)
+        logging.info(result.stderr)
     except subprocess.CalledProcessError as e:
         logging.exception("Command execution failed:", e)
 
