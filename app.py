@@ -97,14 +97,14 @@ def download(software_name, software_version):
 
     # get desktop item
     url = FS_URL + software_name + f"/{software_name}-{software_version}/{software_name.lower()}_{software_version}.desktop"
-    path = f"/home/ubuntu/Desktop/"
-    cmd = f"wget -P {path} {url} && chmod +x {path}{software_name.lower()}_{software_version}.desktop"
+    path = f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
+    cmd = f"wget -O {path} {url} && chmod +x {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     # get icon
     url = FS_URL + software_name + f"/{software_name}-{software_version}/{software_name.lower()}_icon.png"
-    path = f"/usr/share/pixmaps/"
-    cmd = f"sudo wget -P {path} {url}"
+    path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
+    cmd = f"sudo wget -O {path} {url}"
     print(cmd)
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
