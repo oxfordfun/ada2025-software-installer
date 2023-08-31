@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=ADA 2025 Software Installer
 Comment=Install software containers on your machine
-Exec=sudo /opt/ada2025-software-installer/wrapper_script.sh
+Exec=/opt/ada2025-software-installer/wrapper_script.sh
 Icon=/opt/ada2025-software-installer/static/ada.png
 Terminal=false
 Type=Application
