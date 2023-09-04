@@ -1,0 +1,22 @@
+#+INCLUDE: head.org
+
+#+TITLE: Ada 2025 Software Installer System Admin Guide
+
+* Purpose of the software
+
+Ada 2025 Software Installer is used to allow a user of an Ada 2025 machine to easily install software (specifically containers, at least for now) onto their machine for data analysis.
+
+* Architecture
+
+This software is a Flask web application, with Jinja2 HTML templates used to define the web UI. It is intended to run in a python3 virtual environment. Instructions on how to set this up can be found in the README.md file.
+
+The software can be accessed through a web browser at localhost:7322 once running.
+
+* Functionality overview
+
+Upon running, the software will get a list of all available directories at the specified file server (https://ada-files.oxfordfun.com/software/containers/ by default). Each of these directories is associated with a piece of software.
+
+Within these directories, there are different sub-directories, each associated with a different version of the software. This is so that users have access to older versions of the software, which may be necessary for compatibility purposes. The software finds the latest version of the software and displays it on the software card on the index/search page. All available versions of a piece of software can be viewed on the associated "versions" page.
+
+Within each version sub-directory, you will generally find 3 files. Firstly, there is the software container, which contains the relevant software package. There will also be a ".desktop" file, which will be placed in the user's desktop folder so that they have easy access to the software. Finally, there will likely be an image which will be used as the desktop icon.
+
