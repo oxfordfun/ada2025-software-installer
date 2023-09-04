@@ -14,6 +14,8 @@ The software can be accessed through a web browser at localhost:7322 once runnin
 
 * Functionality overview
 
+** File server setup
+
 Upon running, the software will get a list of all available directories at the specified file server (https://ada-files.oxfordfun.com/software/containers/ by default). Each of these directories is associated with a piece of software.
 
 Within these directories, there are different sub-directories, each associated with a different version of the software. This is so that users have access to older versions of the software, which may be necessary for compatibility purposes. 
@@ -32,6 +34,8 @@ Note that to ensure that all software and version information is correctly displ
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_icon.png *# desktop icon*
 
 Please also ensure that software version numbers are in the standard version number format A[.B.C.D.E...] (where A, B, C, D, E... are positive integers or 0) e.g 1.0.8, and that you do not mix version numbering conventions. Please note that leading zeros are supported, so version 1.0.08 is equally valid.
+
+If you are experiencing issues with the software, it is likely that this file structure has been violated in some way.
 
 ** Search
 
