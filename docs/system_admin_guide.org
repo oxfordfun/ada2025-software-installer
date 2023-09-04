@@ -31,3 +31,7 @@ Note that to ensure that all software and version information is correctly displ
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_latest.sif *# software container*
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_icon.png *# desktop icon*
 
+** Search
+
+The user can use the search bar on the home page in order to search for specific pieces of software. When the user submits a search term, the application asks the file server for all available software, and then only displays those to the user whenever the search term is included in the software name.
+
