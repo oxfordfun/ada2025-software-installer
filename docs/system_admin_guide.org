@@ -31,7 +31,7 @@ Note that to ensure that all software and version information is correctly displ
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_latest.sif *# software container*
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_icon.png *# desktop icon*
 
-Please also ensure that software version numbers are in the standard version number format A[.B.C.D.E...] (where A, B, C, D, E... are positive integers or 0) e.g 1.0.8, and that you do not mix version numbering conventions.
+Please also ensure that software version numbers are in the standard version number format A[.B.C.D.E...] (where A, B, C, D, E... are positive integers or 0) e.g 1.0.8, and that you do not mix version numbering conventions. Please note that leading zeros are supported, so version 1.0.08 is equally valid.
 
 ** Search
 
