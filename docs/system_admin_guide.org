@@ -26,7 +26,7 @@ Note that to ensure that all software and version information is correctly displ
 
 /var/www/html/ada-software-files/containers...
 - .../<software_name> *# software directory*
-- .../<software_name>/<software_name>-<software_version> *# version sub-directory*
+- .../<software_name>/<software_name>-<software_version>/ *# version sub-directory*
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_<software_version>.desktop *# desktop file*
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_latest.sif *# software container*
 - .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_icon.png *# desktop icon*
