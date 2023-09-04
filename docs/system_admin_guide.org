@@ -41,3 +41,8 @@ If you are experiencing issues with the software, it is likely that this file st
 
 The user can use the search bar on the home page in order to search for specific pieces of software. When the user submits a search term, the application asks the file server for all available software, and then only displays the software for which the search term is included in the software name.
 
+** Common issues
+
+If you have installed a container and it does not run when you click on the desktop icon, there are several common issues which may be causing this:
+- You don't have apptainer installed
+- The ".desktop" file has a problematic Exec field
