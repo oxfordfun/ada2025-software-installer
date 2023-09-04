@@ -52,12 +52,18 @@ app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_
 
 @app.route("/")
 def index():
+    """
+    Home page. Lists all available software to the user.
+    """
     software_info = get_software_info()
     return flask.render_template("app.jinja2", software_info=software_info)
 
 
 @app.route("/search")
 def search():
+    """
+    Search page. Lists all software matching a search term.
+    """
     search_term = flask.request.args["search"]
     software_info = get_software_info(search_term)
     return flask.render_template("app.jinja2", software_info=software_info)
@@ -65,6 +71,9 @@ def search():
 
 @app.route("/versions/<software_name>")
 def versions(software_name):
+    """
+    Software versions page. List all available versions of a software.
+    """
     if (not software_name) or (software_name not in get_software_list()):
         return flask.redirect(flask.url_for("index"))
     all_versions = get_all_versions_of_software(software_name)
@@ -79,6 +88,9 @@ def versions(software_name):
 
 @app.route("/download/<software_name>/<software_version>")
 def download(software_name, software_version):
+    """
+    Download a specific piece of software
+    """
     logging.info(f"Downloading {software_name} {software_version}")
     source_url = flask.request.args.get("source_url") or "index"
 
@@ -115,6 +127,9 @@ def download(software_name, software_version):
 
 
 def get_software_info(search_term=None):
+    """
+    Get list of software names and available versions for each of them. Can take a search term to filter.
+    """
     logging.info(f"Getting info for all available software.")
     software_list = get_software_list()
     if search_term:
@@ -128,6 +143,9 @@ def get_software_info(search_term=None):
 
 
 def find_items_with_string(arr, search_string):
+    """
+    Find items in a list that contain a search string
+    """
     result = []
     for item in arr:
         if search_string in item:
@@ -136,6 +154,9 @@ def find_items_with_string(arr, search_string):
 
 
 def get_software_list():
+    """
+    Get list of all available software names
+    """
     logging.info(f"Retrieving software list from {FS_URL}")
     response = requests.get(FS_URL)
     softwares = []
@@ -152,6 +173,9 @@ def get_software_list():
 
 
 def get_all_latest_software_versions(software_list):
+    """
+    Get the latest version available for a list of software names
+    """
     logging.info("Determining latest versions for each piece of software")
     latest_versions = []
     for software in software_list:
@@ -160,6 +184,9 @@ def get_all_latest_software_versions(software_list):
 
 
 def get_latest_software_version(software_name):
+    """
+    Get the latest available version for a specific piece of software
+    """
     logging.info(f"Getting latest software version for {software_name}")
     all_versions = get_all_versions_of_software(software_name)
 
@@ -178,6 +205,9 @@ def get_latest_software_version(software_name):
 
 
 def get_all_versions_of_software(software):
+    """
+    Get all available versions of a specific piece of software
+    """
     logging.info(f"Getting list of all available versions of {software}")
     versions = []
     response = requests.get(FS_URL + f"/{software}")
@@ -192,6 +222,9 @@ def get_all_versions_of_software(software):
 
 
 def run_term_cmd(cmd):
+    """
+    Run a bash command in terminal
+    """
     term_cmd = f"sudo bash -c {quote(cmd)}"
     logging.info(term_cmd)
     try:
