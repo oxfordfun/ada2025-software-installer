@@ -24,9 +24,9 @@ Within each version sub-directory, you will generally find 3 files. Firstly, the
 
 Note that to ensure that all software and version information is correctly displayed, the directory tree on the file server should take the following structure:
 
-- /var/www/html/ada-software-files/containers/containers/<software_name> # software directory
-- /var/www/html/ada-software-files/containers/containers/<software_name>-<software_version> # version sub-directory
-- /var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_<software_version>.desktop # desktop file
-- /var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_latest.sif # software container
-- /var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_icon.png # desktop icon
+- /var/www/html/ada-software-files/containers/<software_name> # software directory
+- /var/www/html/ada-software-files/containers/<software_name>-<software_version> # version sub-directory
+- /var/www/html/ada-software-files/containers/<software_name>-<software_version>/<lowercase_software_name>_<software_version>.desktop # desktop file
+- /var/www/html/ada-software-files/containers/<software_name>-<software_version>/<lowercase_software_name>_latest.sif # software container
+- /var/www/html/ada-software-files/containers/<software_name>-<software_version>/<lowercase_software_name>_icon.png # desktop icon
 
