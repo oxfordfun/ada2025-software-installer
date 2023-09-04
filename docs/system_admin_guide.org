@@ -16,7 +16,17 @@ The software can be accessed through a web browser at localhost:7322 once runnin
 
 Upon running, the software will get a list of all available directories at the specified file server (https://ada-files.oxfordfun.com/software/containers/ by default). Each of these directories is associated with a piece of software.
 
-Within these directories, there are different sub-directories, each associated with a different version of the software. This is so that users have access to older versions of the software, which may be necessary for compatibility purposes. The software finds the latest version of the software and displays it on the software card on the index/search page. All available versions of a piece of software can be viewed on the associated "versions" page.
+Within these directories, there are different sub-directories, each associated with a different version of the software. This is so that users have access to older versions of the software, which may be necessary for compatibility purposes. 
+The software finds the latest version of the software and displays it on the software card on the index/search page. All available versions of a piece of software can be viewed on the associated "versions" page.
+These available versions are determined by scraping the software directory on the file server i.e. https://ada-files.oxfordfun.com/software/containers/<software_name>
 
 Within each version sub-directory, you will generally find 3 files. Firstly, there is the software container, which contains the relevant software package. There will also be a ".desktop" file, which will be placed in the user's desktop folder so that they have easy access to the software. Finally, there will likely be an image which will be used as the desktop icon.
+
+Note that to ensure that all software and version information is correctly displayed, the directory tree on the file server should take the following structure:
+
+/var/www/html/ada-software-files/containers/containers/<software_name> # software directory
+/var/www/html/ada-software-files/containers/containers/<software_name>-<software_version> # version sub-directory
+/var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_<software_version>.desktop # desktop file
+/var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_latest.sif # software container
+/var/www/html/ada-software-files/containers/containers/<software_name>-<software_version>/<lowercase_software_name>_icon.png # desktop icon
 
