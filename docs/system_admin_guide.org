@@ -45,4 +45,4 @@ The user can use the search bar on the home page in order to search for specific
 
 If you have installed a container and it does not run when you click on the desktop icon, there are several common issues which may be causing this:
 - You don't have apptainer installed
-- The ".desktop" file has a problematic Exec field
+- The ".desktop" file has a problematic Exec field. Try running the container directly from terminal in order to determine the appropriate command to put in the Exec field.
