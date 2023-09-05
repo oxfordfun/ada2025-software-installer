@@ -64,10 +64,10 @@ If you have installed a container and it does not run when you click on the desk
 On the file server, run the following commands
 
 #+BEGIN_SRC shell
-cd /home/ubuntu/ada2025_si/opt/ada2025-software-installer
+cd /home/ubuntu/ada2025_si/opt/ada2025-software-installer/
 git checkout <branch_name>
 git pull
-cd /
+cd /home/ubuntu/
 tar -czvf ada2025_si.tar.gz -C ada2025_si/ .
 sudo cp ada2025_si.tar.gz /var/www/html/ada-software-files/Ada2025_SI/ada2025_si.tar.gz
 #+END_SRC
