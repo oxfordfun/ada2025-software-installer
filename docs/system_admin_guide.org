@@ -61,7 +61,7 @@ If you have installed a container and it does not run when you click on the desk
 
 * Updating the Ada 2025 Software Installer version that is available on new images
 
-On the file server, run the following commands
+On the file server (as user ubuntu), run the following commands
 
 #+BEGIN_SRC shell
 cd /home/ubuntu/ada2025_si/opt/ada2025-software-installer/
