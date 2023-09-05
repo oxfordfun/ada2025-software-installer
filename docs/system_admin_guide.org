@@ -12,9 +12,7 @@ This software is a Flask web application, with Jinja2 HTML templates used to def
 
 The software can be accessed through a web browser at localhost:7322 once running.
 
-* Functionality overview
-
-** File server setup
+* File server setup
 
 Upon running, the software will get a list of all available directories at the specified file server (https://ada-files.oxfordfun.com/software/containers/ by default). Each of these directories is associated with a piece of software.
 
@@ -37,11 +35,11 @@ Please also ensure that software version numbers are in the standard version num
 
 If you are experiencing issues with the software, it is likely that this file structure has been violated in some way.
 
-** Search
+* Search
 
 The user can use the search bar on the home page in order to search for specific pieces of software. When the user submits a search term, the application asks the file server for all available software, and then only displays the software for which the search term is included in the software name.
 
-** Downloading software
+* Downloading software
 
 When the user presses the green download button, three files are downloaded: 
 
@@ -51,7 +49,7 @@ When the user presses the green download button, three files are downloaded:
 
 Ada 2025 Software Installer cannot currently provide real time updates on the download status of a software package.
 
-** Version history
+* Version history
 
 By pressing the blue version history button on a software card, the user is able to view all available software versions on the file server. They can choose to download a specific version of the software from this page.
 
