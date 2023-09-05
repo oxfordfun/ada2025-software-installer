@@ -1,0 +1,73 @@
+#+INCLUDE: head.org
+
+#+TITLE: Ada 2025 Software Installer System Admin Guide
+
+* Purpose of the software
+
+Ada 2025 Software Installer is used to allow a user of an Ada 2025 machine to easily install software (specifically containers, at least for now) onto their machine for data analysis.
+
+* Architecture
+
+This software is a Flask web application, with Jinja2 HTML templates used to define the web UI. It is intended to run in a python3 virtual environment. Instructions on how to set this up can be found in the README.md file.
+
+The software can be accessed through a web browser at localhost:7322 once running.
+
+* File server setup
+
+Upon running, the software will get a list of all available directories at the specified file server (https://ada-files.oxfordfun.com/software/containers/ by default). Each of these directories is associated with a piece of software.
+
+Within these directories, there are different sub-directories, each associated with a different version of the software. This is so that users have access to older versions of the software, which may be necessary for compatibility purposes. 
+The software finds the latest version of the software and displays it on the software card on the index/search page. All available versions of a piece of software can be viewed on the associated "versions" page, which is accessible from the blue button on the relevant software card.
+These available versions are determined by scraping the software directory on the file server i.e. https://ada-files.oxfordfun.com/software/containers/<software_name>
+
+Within each version sub-directory, you will generally find 3 files. Firstly, there is the software container (the ".sif" file), which contains the relevant software package. There will also be a ".desktop" file, which will be placed in the user's desktop folder so that they have easy access to the software. Finally, there will likely be an image which will be used as the desktop icon (the ".png" file).
+
+Note that to ensure that all software and version information is correctly displayed, the directory tree on the file server should take the following structure:
+
+/var/www/html/ada-software-files/containers...
+- .../<software_name> *# software directory*
+- .../<software_name>/<software_name>-<software_version>/ *# version sub-directory*
+- .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_<software_version>.desktop *# desktop file*
+- .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_latest.sif *# software container*
+- .../<software_name>/<software_name>-<software_version>/<lowercase_software_name>_icon.png *# desktop icon*
+
+Please also ensure that software version numbers are in the standard version number format A[.B.C.D.E...] (where A, B, C, D, E... are positive integers or 0) e.g 1.0.8, and that you do not mix version numbering conventions. Please note that leading zeros are supported, so version 1.0.08 is equally valid.
+
+If you are experiencing issues with the software, it is likely that this file structure has been violated in some way.
+
+* Search
+
+The user can use the search bar on the home page in order to search for specific pieces of software. When the user submits a search term, the application asks the file server for all available software, and then only displays the software for which the search term is included in the software name.
+
+* Downloading software
+
+When the user presses the green download button, three files are downloaded: 
+
+- The ".desktop" file is downloaded to /home/ubuntu/Desktop/
+- The ".png" file is downloaded to /usr/share/pixmaps/
+- The ".sif" file is downloaded to /home/ubuntu/Downloads/
+
+Ada 2025 Software Installer cannot currently provide real time updates on the download status of a software package.
+
+* Version history
+
+By pressing the blue version history button on a software card, the user is able to view all available software versions on the file server. They can choose to download a specific version of the software from this page.
+
+* Common issues
+
+If you have installed a container and it does not run when you click on the desktop icon, there are several common issues which may be causing this:
+- You don't have apptainer installed
+- The ".desktop" file has a problematic Exec field. Try running the container directly from terminal in order to determine the appropriate command to put in the Exec field.
+
+* Updating the Ada 2025 Software Installer version that is available on new images
+
+On the file server (as user ubuntu), run the following commands
+
+#+BEGIN_SRC shell
+cd /home/ubuntu/ada2025_si/opt/ada2025-software-installer/
+git checkout <branch_name>
+git pull
+cd /home/ubuntu/
+tar -czvf ada2025_si.tar.gz -C ada2025_si/ .
+sudo cp ada2025_si.tar.gz /var/www/html/ada-software-files/Ada2025_SI/ada2025_si.tar.gz
+#+END_SRC
