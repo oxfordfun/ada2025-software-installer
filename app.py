@@ -10,6 +10,7 @@ import subprocess
 from bs4 import BeautifulSoup
 from distutils.version import StrictVersion
 from shlex import quote
+import json
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -161,12 +162,12 @@ def get_software_list():
     response = requests.get(FS_URL)
     softwares = []
     if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            if href.endswith("/"):
-                softwares.append(href[:-1])
-        softwares = softwares[1:]  # remove ../
+        software_list = get_software_file()
+        i = 0
+        for software_name in software_list:
+            softwares.append(software_list["contents"][i]["name"])
+            i+=1
+        
     else:
         logging.error(f"Error: Unable to retrieve content from {FS_URL}")
     return softwares
@@ -235,6 +236,11 @@ def run_term_cmd(cmd):
         logging.info(result.stderr)
     except subprocess.CalledProcessError as e:
         logging.exception("Command execution failed:", e)
+
+
+def get_software_file():
+    software = requests.get("https://ada-files.oxfordfun.com/software/containers/software.json")
+    return software.json()
 
 
 def main():
