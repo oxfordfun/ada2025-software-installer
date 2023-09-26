@@ -7,7 +7,6 @@ import flask
 import os
 import requests
 import subprocess
-from bs4 import BeautifulSoup
 from distutils.version import StrictVersion
 from shlex import quote
 import json
@@ -163,10 +162,10 @@ def get_software_list():
     softwares = []
     if response.status_code == 200:
         software_list = get_software_file()
-        i = 0
+        count = 0
         for software_name in software_list:
-            softwares.append(software_list["contents"][i]["name"])
-            i+=1
+            softwares.append(software_list["contents"][count]["name"])
+            count+=1
         
     else:
         logging.error(f"Error: Unable to retrieve content from {FS_URL}")
@@ -214,15 +213,15 @@ def get_all_versions_of_software(software):
     response = requests.get(FS_URL + f"/{software}")
     if response.status_code == 200:
         software_list = get_software_file()
-        i = 0
-        x = 0
+        name_count = 0
+        version_count = 0
         for software_name in software_list:
-            if software_list["contents"][i]["name"] == software:
-                software_versions = software_list["contents"][i]["contents"]
+            if software_list["contents"][name_count]["name"] == software:
+                software_versions = software_list["contents"][name_count]["contents"]
                 for software_version in software_versions:
-                    versions.append(software_list["contents"][i]["contents"][x]["name"])
-                    x+=1
-            i+=1
+                    versions.append(software_list["contents"][name_count]["contents"][version_count]["name"])
+                    version_count+=1
+            name_count+=1
     return versions
 
 
