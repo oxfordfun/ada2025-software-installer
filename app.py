@@ -213,12 +213,16 @@ def get_all_versions_of_software(software):
     versions = []
     response = requests.get(FS_URL + f"/{software}")
     if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            if href.endswith("/"):
-                versions.append(href[:-1])
-    versions = versions[1:]  # remove ../
+        software_list = get_software_file()
+        i = 0
+        x = 0
+        for software_name in software_list:
+            if software_list["contents"][i]["name"] == software:
+                software_versions = software_list["contents"][i]["contents"]
+                for software_version in software_versions:
+                    versions.append(software_list["contents"][i]["contents"][x]["name"])
+                    x+=1
+            i+=1
     return versions
 
 
