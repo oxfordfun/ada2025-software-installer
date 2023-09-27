@@ -30,7 +30,7 @@ DL_PATH # defaults to /home/ubuntu/Downloads/
 A JSON file has been created in the server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, versions and associated files that are needed for the installation of the software. The JSON file is loaded into the python program and the names and versions are extraced from it to create two lists, one for the names of the software and one for the versions of each piece of software.
 
 ## Cron job
-A cron job has been used to keep the JSON file in the server up to date. The command is run every hour on the 59th minute of each hour.<br>
+A cron job has been used to keep the JSON file in the server up to date. The command is run every hour on the 59th minute of each hour.<br><br>
 Here is the command:
 ```bash
 59 * * * * tree -J > software.json
