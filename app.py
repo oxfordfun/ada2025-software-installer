@@ -260,7 +260,7 @@ def get_software_file():
     software = requests.get(
         "https://ada-files.oxfordfun.com/software/containers/software.json"
     )
-    return software.json
+    return software.json()
 
 
 def main():
