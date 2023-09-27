@@ -257,11 +257,10 @@ def run_term_cmd(cmd):
 
 
 def get_software_file():
-    software_as_list = requests.get(
+    software = requests.get(
         "https://ada-files.oxfordfun.com/software/containers/software.json"
     )
-    software = {}
-    return software
+    return software.json
 
 
 def main():
