@@ -31,6 +31,7 @@ A JSON file has been created in the server named "software.json", it is located 
 
 ## Cron job
 A cron job has been used to keep the JSON file in the server up to date. The command is run every hour on the 59th minute of each hour.
+Here is the command:
 ```bash
 59 * * * * tree -J > software.json
 ```
