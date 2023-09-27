@@ -7,9 +7,9 @@ import flask
 import os
 import requests
 import subprocess
-from bs4 import BeautifulSoup
 from distutils.version import StrictVersion
 from shlex import quote
+import json
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -161,12 +161,12 @@ def get_software_list():
     response = requests.get(FS_URL)
     softwares = []
     if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            if href.endswith("/"):
-                softwares.append(href[:-1])
-        softwares = softwares[1:]  # remove ../
+        software_list = get_software_file()
+        count = 0
+        for software_name in software_list:
+            softwares.append(software_list["contents"][count]["name"])
+            count+=1
+        
     else:
         logging.error(f"Error: Unable to retrieve content from {FS_URL}")
     return softwares
@@ -212,12 +212,18 @@ def get_all_versions_of_software(software):
     versions = []
     response = requests.get(FS_URL + f"/{software}")
     if response.status_code == 200:
-        soup = BeautifulSoup(response.content, "html.parser")
-        for link in soup.find_all("a"):
-            href = link.get("href")
-            if href.endswith("/"):
-                versions.append(href[:-1])
-    versions = versions[1:]  # remove ../
+        software_list = get_software_file()
+        name_count = 0
+        version_count = 0
+        for software_name in software_list:
+            #Loops through until desired software is found
+            if software_list["contents"][name_count]["name"] == software:
+                software_versions = software_list["contents"][name_count]["contents"]
+                #Loops through until all versions of desired software have been added to list
+                for software_version in software_versions:
+                    versions.append(software_list["contents"][name_count]["contents"][version_count]["name"])
+                    version_count+=1
+            name_count+=1
     return versions
 
 
@@ -235,6 +241,11 @@ def run_term_cmd(cmd):
         logging.info(result.stderr)
     except subprocess.CalledProcessError as e:
         logging.exception("Command execution failed:", e)
+
+
+def get_software_file():
+    software = requests.get("https://ada-files.oxfordfun.com/software/containers/software.json")
+    return software.json()
 
 
 def main():
