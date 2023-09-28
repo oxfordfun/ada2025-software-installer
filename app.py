@@ -10,6 +10,7 @@ import subprocess
 from distutils.version import StrictVersion
 from shlex import quote
 import json
+import urllib.request
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -172,8 +173,8 @@ def get_software_list():
     if response.status_code == 200:
         software_list = get_software_file()
         count = 0
-        for software_name in software_list:
-            softwares.append(software_list["contents"][count]["name"])
+        for software_name in software_list[0]:
+            softwares.append(software_list[0]["contents"][count]["name"])
             count += 1
 
     else:
@@ -224,14 +225,14 @@ def get_all_versions_of_software(software):
         software_list = get_software_file()
         name_count = 0
         version_count = 0
-        for software_name in software_list:
+        for software_name in software_list[0]:
             # Loops through until desired software is found
-            if software_list["contents"][name_count]["name"] == software:
-                software_versions = software_list["contents"][name_count]["contents"]
+            if software_list[0]["contents"][name_count]["name"] == software:
+                software_versions = software_list[0]["contents"][name_count]["contents"]
                 # Loops through until all versions of desired software have been added to list
                 for software_version in software_versions:
                     versions.append(
-                        software_list["contents"][name_count]["contents"][
+                        software_list[0]["contents"][name_count]["contents"][
                             version_count
                         ]["name"]
                     )
@@ -257,10 +258,11 @@ def run_term_cmd(cmd):
 
 
 def get_software_file():
-    software = requests.get(
+    with urllib.request.urlopen(
         "https://ada-files.oxfordfun.com/software/containers/software.json"
-    )
-    return software.json()
+    ) as url:
+        software = json.load(url)
+        return software
 
 
 def main():
