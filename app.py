@@ -58,7 +58,9 @@ def index():
     Home page. Lists all available software to the user.
     """
     software_info = get_software_info()
-    return flask.render_template("app.jinja2", software_info=software_info)
+    return flask.render_template(
+        "app.jinja2", software_info=software_info, title="Software List"
+    )
 
 
 @app.route("/search")
@@ -80,7 +82,10 @@ def versions(software_name):
         return flask.redirect(flask.url_for("index"))
     all_versions = get_all_versions_of_software(software_name)
     return flask.render_template(
-        "versions.jinja2", software_name=software_name, all_versions=all_versions
+        "versions.jinja2",
+        software_name=software_name,
+        all_versions=all_versions,
+        title=software_name + " Versions",
     )
 
 
