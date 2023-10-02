@@ -79,10 +79,6 @@ def versions(software_name):
     if (not software_name) or (software_name not in get_software_list()):
         return flask.redirect(flask.url_for("index"))
     all_versions = get_all_versions_of_software(software_name)
-    prefix = software_name + "-"
-    all_versions = [
-        version[len(prefix) :] for version in all_versions if version.startswith(prefix)
-    ]
     return flask.render_template(
         "versions.jinja2", software_name=software_name, all_versions=all_versions
     )
@@ -174,7 +170,7 @@ def get_software_list():
         software_list = get_software_file()
         count = 0
         for software_name in software_list[0]:
-            softwares.append(software_list[0]["contents"][count]["name"])
+            softwares.append(software_list[count]["name"])
             count += 1
 
     else:
@@ -198,20 +194,15 @@ def get_latest_software_version(software_name):
     Get the latest available version for a specific piece of software
     """
     logging.info(f"Getting latest software version for {software_name}")
-    all_versions = get_all_versions_of_software(software_name)
+    versions = get_all_versions_of_software(software_name)
 
-    prefix = software_name + "-"
-    filtered_versions = [
-        version[len(prefix) :] for version in all_versions if version.startswith(prefix)
-    ]
-
-    if not filtered_versions:
+    if not versions:
         return ""
 
     try:
-        return max(filtered_versions, key=StrictVersion)
+        return max(versions, key=StrictVersion)
     except:
-        return max(filtered_versions)
+        return max(versions)
 
 
 def get_all_versions_of_software(software):
@@ -227,14 +218,12 @@ def get_all_versions_of_software(software):
         version_count = 0
         for software_name in software_list[0]:
             # Loops through until desired software is found
-            if software_list[0]["contents"][name_count]["name"] == software:
-                software_versions = software_list[0]["contents"][name_count]["contents"]
+            if software_list[name_count]["name"] == software:
+                software_versions = software_list[name_count]["variants"]
                 # Loops through until all versions of desired software have been added to list
                 for software_version in software_versions:
                     versions.append(
-                        software_list[0]["contents"][name_count]["contents"][
-                            version_count
-                        ]["name"]
+                        software_list[name_count]["variants"][version_count]["version"]
                     )
                     version_count += 1
             name_count += 1
