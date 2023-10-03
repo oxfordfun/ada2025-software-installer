@@ -9,7 +9,6 @@
     python3 -m venv env
     source env/bin/activate
     pip3 install -r requirements.txt
-    chmod +x ./wrapper_script.sh # (OPTIONAL STEP)
     cp ada2025-software-installer.desktop /home/ubuntu/Desktop/ # or wherever your desktop is (OPTIONAL STEP)
     chown ubuntu /home/ubuntu/Desktop/ada2025-software-installer.desktop # or whatever your user is (OPTIONAL STEP)
     chmod +x /home/ubuntu/Desktop/ada2025-software-installer.desktop # (OPTIONAL STEP)
