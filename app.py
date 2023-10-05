@@ -174,7 +174,7 @@ def get_software_list():
     if response.status_code == 200:
         software_list = get_software_file()
         count = 0
-        for software_name in software_list[0]:
+        for software_name in software_list:
             softwares.append(software_list[count]["name"])
             count += 1
 
@@ -221,7 +221,7 @@ def get_all_versions_of_software(software):
         software_list = get_software_file()
         name_count = 0
         version_count = 0
-        for software_name in software_list[0]:
+        for software_name in software_list:
             # Loops through until desired software is found
             if software_list[name_count]["name"] == software:
                 software_versions = software_list[name_count]["variants"]
