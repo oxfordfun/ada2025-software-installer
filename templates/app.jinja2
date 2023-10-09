@@ -24,11 +24,14 @@
         <!-- Software list -->
         {% for software in software_info %}
             <div class="w3-card w3-padding w3-round w3-animate-opacity" style="margin-top: 20px; display: flex;">
+                <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto; margin-left: auto; padding: 15px">
+                    <img src="static/{{ software[2] }}_icon.png" width="auto" height="65">
+                </div>
                 <div style="width: 83%">
                     <p class="card-text"><b class=".uppercase">{{ software[0] }}</b></p>
                     <p class="card-text">Latest ver: {{ software[1] }}</p>
                 </div>
-                <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto;">
+                <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto; padding: 15px">
                     <button class="ada-blue download-button-container" onclick="redirectToVersionsPage('{{ software[0] }}')" title="View older versions">
                         <i class="fa-solid fa-clock-rotate-left icon"></i>
                     </button>
