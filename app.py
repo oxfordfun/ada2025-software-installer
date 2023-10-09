@@ -147,10 +147,13 @@ def get_software_info(search_term=None):
         software_list = find_items_with_string(software_list, search_term)
     version_list = get_all_latest_software_versions(software_list)
     lower_name = get_lower_software_list()
+    description_list = get_software_description()
     software_info = []
     for i in range(0, len(software_list)):
         if version_list[i]:
-            software_info.append([software_list[i], version_list[i], lower_name[i]])
+            software_info.append(
+                [software_list[i], version_list[i], lower_name[i], description_list[i]]
+            )
     return software_info
 
 
@@ -201,6 +204,25 @@ def get_lower_software_list():
     else:
         logging.error(f"Error: Unable to retrieve content from {FS_URL}")
     return lower_software
+
+
+def get_software_description():
+    """
+    Get a list of the descriptions of all software
+    """
+    logging.info(f"Retrieving software descriptions from {FS_URL}")
+    response = requests.get(FS_URL)
+    descriptions = []
+    if response.status_code == 200:
+        software_list = get_software_file()
+        count = 0
+        for software_description in software_list:
+            descriptions.append(software_list[count]["description"])
+            count += 1
+
+    else:
+        logging.error(f"Error: Unable to retrieve content from {FS_URL}")
+    return descriptions
 
 
 def get_all_latest_software_versions(software_list):
