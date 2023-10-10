@@ -52,12 +52,8 @@ app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_
     32
 )
 
-cache = Cache(config={"CACHE_TYPE": "SimpleCache"})
-cache.init_app(app)
-
 
 @app.route("/")
-@cache.cached()
 def index():
     """
     Home page. Lists all available software to the user.
@@ -71,10 +67,10 @@ def index():
 @app.route("/search")
 def search():
     """
-    Search page. Lists all software matching a search term.  
+    Search page. Lists all software matching a search term.
     """
     search_term = flask.request.args["search"]
-    software_info = get_software_info(search_term)
+    software_info = get_searched_software_info(search_term)
     return flask.render_template("app.jinja2", software_info=software_info)
 
 
@@ -142,23 +138,37 @@ def download(software_name, software_version):
         return flask.redirect(flask.url_for(source_url))
 
 
-def get_software_info(search_term=None):
+def get_software_info():
     """
-    Get list of software names and available versions for each of them. Can take a search term to filter.
+    Get list of software info
     """
     logging.info(f"Getting info for all available software.")
     software_list = get_software_list()
-    if search_term:
-        software_list = find_items_with_string(software_list, search_term)
     version_list = get_all_latest_software_versions(software_list)
     lower_name = get_lower_software_list()
     description_list = get_software_description()
     software_info = []
     for i in range(0, len(software_list)):
-        if version_list[i]:
-            software_info.append(
-                [software_list[i], version_list[i], lower_name[i], description_list[i]]
-            )
+        software_info.append(
+            [software_list[i], version_list[i], lower_name[i], description_list[i]]
+        )
+    return software_info
+
+
+def get_searched_software_info(search_term):
+    """
+    Get list of searched for software info
+    """
+    logging.info(f"Getting software info for searched software.")
+    software_list = get_software_list()
+    software_list = find_items_with_string(software_list, search_term)
+    version_list = get_all_latest_software_versions(software_list)
+    lower_name = get_lower_software_list()
+    description_list = get_software_description()
+    software_info = []
+    for i in range(0, len(software_list)):
+        if version_list[i] and lower_name[i]:
+            software_info.append([software_list[i], version_list[i], lower_name[i]])
     return software_info
 
 
