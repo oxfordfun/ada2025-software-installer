@@ -71,7 +71,7 @@ def index():
 @app.route("/search")
 def search():
     """
-    Search page. Lists all software matching a search term.
+    Search page. Lists all software matching a search term.  
     """
     search_term = flask.request.args["search"]
     software_info = get_software_info(search_term)
