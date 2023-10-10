@@ -4,6 +4,7 @@ import string
 import threading
 import secrets
 import flask
+from flask_caching import Cache
 import os
 import requests
 import subprocess
@@ -51,8 +52,12 @@ app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_
     32
 )
 
+cache = Cache(config={"CACHE_TYPE": "SimpleCache"})
+cache.init_app(app)
+
 
 @app.route("/")
+@cache.cached()
 def index():
     """
     Home page. Lists all available software to the user.
