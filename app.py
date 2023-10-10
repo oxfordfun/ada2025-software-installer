@@ -71,7 +71,7 @@ def search():
     """
     search_term = flask.request.args["search"]
     software_info = get_searched_software_info(search_term)
-    return flask.render_template("app.jinja2", software_info=software_info)
+    return flask.render_template("app.jinja2", software_info=software_info, title="Search Results")
 
 
 @app.route("/versions/<software_name>")
