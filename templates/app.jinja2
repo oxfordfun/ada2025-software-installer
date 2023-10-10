@@ -29,7 +29,10 @@
                 </div>
                 <div style="width: 83%">
                     <p class="card-text"><b class=".uppercase">{{ software[0] }}</b></p>
-                    <p class="card-text">Latest ver: {{ software[1] }}</p>
+                    <p>Latest version: {{ software[1] }}</p>
+                </div>
+                <div style="width: 100%">
+                    <p>{{ software[3] }}</p>
                 </div>
                 <div style="display: flex; margin-left: auto; margin-top: auto; margin-bottom: auto; padding: 15px">
                     <button class="ada-blue download-button-container" onclick="redirectToVersionsPage('{{ software[0] }}')" title="View older versions">

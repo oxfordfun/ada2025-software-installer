@@ -294,6 +294,9 @@ def run_term_cmd(cmd):
 
 
 def get_software_file():
+    """
+    Get software file from server and save as dictionary
+    """
     with urllib.request.urlopen(
         "https://ada-files.oxfordfun.com/software/containers/software.json"
     ) as url:
