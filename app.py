@@ -163,12 +163,11 @@ def get_searched_software_info(search_term):
     software_list = get_software_list()
     software_list = find_items_with_string(software_list, search_term)
     version_list = get_all_latest_software_versions(software_list)
-    lower_name = get_lower_software_list()
     description_list = get_software_description()
     software_info = []
     for i in range(0, len(software_list)):
-        if version_list[i] and lower_name[i]:
-            software_info.append([software_list[i], version_list[i], lower_name[i]])
+        if version_list[i]:
+            software_info.append([software_list[i], version_list[i], software_list[i].lower()])
     return software_info
 
 
