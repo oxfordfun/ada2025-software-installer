@@ -71,6 +71,11 @@ def search():
     Search page. Lists all software matching a search term.
     """
     search_term = flask.request.args["search"]
+    if len(search_term) == 0:
+        software_info = get_software_info()
+        return flask.render_template(
+            "app.jinja2", software_info=software_info, title="Search Results"
+        )
     software_info = get_searched_software_info(search_term)
     return flask.render_template(
         "app.jinja2",
