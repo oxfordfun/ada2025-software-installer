@@ -296,10 +296,8 @@ def get_all_versions_of_software(software):
         name_count = 0
         version_count = 0
         for software_name in software_list:
-            # Loops through until desired software is found
             if software_list[name_count]["name"] == software:
                 software_versions = software_list[name_count]["variants"]
-                # Loops through until all versions of desired software have been added to list
                 for software_version in software_versions:
                     versions.append(
                         software_list[name_count]["variants"][version_count]["version"]
