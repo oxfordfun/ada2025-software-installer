@@ -12,6 +12,7 @@ from distutils.version import StrictVersion
 from shlex import quote
 import json
 import urllib.request
+from rapidfuzz import fuzz
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -71,7 +72,9 @@ def search():
     """
     search_term = flask.request.args["search"]
     software_info = get_searched_software_info(search_term)
-    return flask.render_template("app.jinja2", software_info=software_info, title="Search Results")
+    return flask.render_template(
+        "app.jinja2", software_info=software_info, title="Search Results"
+    )
 
 
 @app.route("/versions/<software_name>")
@@ -165,9 +168,19 @@ def get_searched_software_info(search_term):
     version_list = get_all_latest_software_versions(software_list)
     description_list = get_software_description()
     software_info = []
-    for i in range(0, len(software_list)):
-        if version_list[i]:
-            software_info.append([software_list[i], version_list[i], software_list[i].lower()])
+    if len(software_list) == 0:
+        flask.flash("No results found", "danger")
+    else:
+        for i in range(0, len(software_list)):
+            if version_list[i]:
+                software_info.append(
+                    [
+                        software_list[i],
+                        version_list[i],
+                        software_list[i].lower(),
+                        description_list[i],
+                    ]
+                )
     return software_info
 
 
@@ -177,7 +190,7 @@ def find_items_with_string(arr, search_string):
     """
     result = []
     for item in arr:
-        if search_string in item:
+        if fuzz.partial_ratio(search_string.lower(), item.lower()) > 50:
             result.append(item)
     return result
 
