@@ -332,8 +332,11 @@ def get_software_file():
     Get software file from Ada endpoint, or file if endpoint is unavailable, and return as a dictionary
     """
     try:
+        file = open("./software_db.txt", "w")
         with urllib.request.urlopen("https://ada.stfc.ac.uk/software_db") as url:
             software = json.load(url)
+        file.write(json.dumps(software, indent=4))
+        file.close()
         return software
     except:
         file = open("./software_db.txt", "r")
