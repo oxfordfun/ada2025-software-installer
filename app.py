@@ -329,11 +329,30 @@ def run_term_cmd(cmd):
 
 def get_software_file():
     """
-    Get software file from Ada endpoint and save as dictionary
+    Get software file from Ada endpoint, or file if endpoint is unavailable, and return as a dictionary
     """
+    try:
+        with urllib.request.urlopen("https://ada.stfc.ac.uk/software_db") as url:
+            software = json.load(url)
+        return software
+    except:
+        file = open("./software_db.txt", "r")
+        software = file.read()
+        return json.loads(software)
+
+
+def write_software_file():
+    """
+    Write the contents of the Software database, from Ada, to a file, this is to be used as a backup incase the url cannot be accessed later
+    """
+    file = open("./software_db.txt", "w")
     with urllib.request.urlopen("https://ada.stfc.ac.uk/software_db") as url:
         software = json.load(url)
-        return software
+    file.write(json.dumps(software, indent=4))
+    file.close()
+
+
+write_software_file()
 
 
 def main():
