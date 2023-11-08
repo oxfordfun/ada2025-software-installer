@@ -4,7 +4,7 @@ import string
 import threading
 import secrets
 import flask
-from flask_caching import Cache
+from cachetools import cached, TTLCache
 import os
 import requests
 import subprocess
@@ -52,12 +52,9 @@ app = flask.Flask(__name__)
 app.config["SECRET_KEY"] = os.environ.get("ADA2025_SI_FLASK_SECRET_KEY") or gen_token(
     32
 )
-cache = Cache(config={"CACHE_TYPE": "SimpleCache"})
-cache.init_app(app)
 
 
 @app.route("/")
-@cache.cached(timeout=60)
 def index():
     """
     Home page. Lists all available software to the user.
@@ -149,6 +146,7 @@ def download(software_name, software_version):
         return flask.redirect(flask.url_for(source_url))
 
 
+@cached(cache=TTLCache(maxsize=1, ttl=60))
 def get_software_info():
     """
     Get list of software info
