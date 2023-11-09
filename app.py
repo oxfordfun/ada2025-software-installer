@@ -207,17 +207,13 @@ def get_software_list():
     Get list of all available software names
     """
     logging.info(f"Retrieving software list")
-    response = requests.get(ADA_URL)
     softwares = []
-    if response.status_code == 200:
-        software_list = get_software_file()
-        count = 0
-        for software_name in software_list:
-            softwares.append(software_list[count]["name"])
-            count += 1
+    software_list = get_software_file()
+    count = 0
+    for software_name in software_list:
+        softwares.append(software_list[count]["name"])
+        count += 1
 
-    else:
-        logging.error(f"Error: Unable to retrieve content")
     return softwares
 
 
@@ -226,17 +222,13 @@ def get_lower_software_list():
     Get list of all available software names in lowercase
     """
     logging.info(f"Retrieving lowercase software list")
-    response = requests.get(ADA_URL)
     lower_software = []
-    if response.status_code == 200:
-        software_list = get_software_file()
-        count = 0
-        for software_name in software_list:
-            lower_software.append(software_list[count]["name"].lower())
-            count += 1
+    software_list = get_software_file()
+    count = 0
+    for software_name in software_list:
+        lower_software.append(software_list[count]["name"].lower())
+        count += 1
 
-    else:
-        logging.error(f"Error: Unable to retrieve content")
     return lower_software
 
 
@@ -245,18 +237,14 @@ def get_software_description(software_list):
     Get a list of the descriptions of all software
     """
     logging.info(f"Retrieving software descriptions")
-    response = requests.get(ADA_URL)
     descriptions = []
     software_file = get_software_file()
-    if response.status_code == 200:
-        name_count = 0
-        for software_description in software_file:
-            if software_file[name_count]["name"] in software_list:
-                descriptions.append(software_file[name_count]["description"])
-            name_count += 1
+    name_count = 0
+    for software_description in software_file:
+        if software_file[name_count]["name"] in software_list:
+            descriptions.append(software_file[name_count]["description"])
+        name_count += 1
 
-    else:
-        logging.error(f"Error: Unable to retrieve content")
     return descriptions
 
 
