@@ -30,13 +30,10 @@ def str_to_bool(str):
 HOST = os.getenv("ADA2025_SI_HOST") or "127.0.0.1"
 PORT = os.getenv("ADA2025_SI_PORT") or 7322
 DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
-FS_URL = (
-    os.getenv("ADA2025_SI_FS_URL")
-    or "https://ada-files.oxfordfun.com/software/containers/"
-)  # make sure this ends in a "/"
 DL_PATH = (
     os.getenv("ADA2025_SI_DL_PATH") or "/home/ubuntu/Downloads/"
 )  # make sure this ends in a "/"
+ADA_URL = "https://ada.stfc.ac.uk/software_db"
 
 
 def gen_token(length):
@@ -103,40 +100,48 @@ def download(software_name, software_version):
     """
     Download a specific piece of software
     """
+    software_file = get_software_file()
+
+    name_count = 0
+    for name in software_file:
+        if software_file[name_count]["name"] == software_name:
+            version_count = 0
+            for version in software_file[name_count]["variants"]:
+                if (
+                    software_file[name_count]["variants"][version_count]["version"]
+                    == software_version
+                ):
+                    apptainer_file = software_file[name_count]["variants"][
+                        version_count
+                    ]["apptainer_file"]
+                    desktop_file = software_file[name_count]["variants"][version_count][
+                        "desktop_file"
+                    ]
+                    icon_file = software_file[name_count]["variants"][version_count][
+                        "icon_file"
+                    ]
+                version_count += 1
+        name_count += 1
+
     logging.info(f"Downloading {software_name} {software_version}")
     source_url = flask.request.args.get("source_url") or "index"
 
     # get software
-    url = (
-        FS_URL
-        + software_name
-        + f"/{software_name}-{software_version}/{software_name.lower()}_latest.sif"
-    )
     path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
-    cmd = f"wget -O {path} {url} && chmod +x {path}"
+    cmd = f"wget -O {path} {apptainer_file} && chmod +x {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
     flask.flash(
         f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete."
     )
 
     # get desktop item
-    url = (
-        FS_URL
-        + software_name
-        + f"/{software_name}-{software_version}/{software_name.lower()}_{software_version}.desktop"
-    )
     path = f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
-    cmd = f"wget -O {path} {url} && chmod +x {path}"
+    cmd = f"wget -O {path} {desktop_file} && chmod +x {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     # get icon
-    url = (
-        FS_URL
-        + software_name
-        + f"/{software_name}-{software_version}/{software_name.lower()}_icon.png"
-    )
     path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
-    cmd = f"sudo wget -O {path} {url}"
+    cmd = f"sudo wget -O {path} {icon_file}"
     logging.info(cmd)
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
@@ -205,8 +210,8 @@ def get_software_list():
     """
     Get list of all available software names
     """
-    logging.info(f"Retrieving software list from {FS_URL}")
-    response = requests.get(FS_URL)
+    logging.info(f"Retrieving software list")
+    response = requests.get(ADA_URL)
     softwares = []
     if response.status_code == 200:
         software_list = get_software_file()
@@ -216,7 +221,7 @@ def get_software_list():
             count += 1
 
     else:
-        logging.error(f"Error: Unable to retrieve content from {FS_URL}")
+        logging.error(f"Error: Unable to retrieve content")
     return softwares
 
 
@@ -224,8 +229,8 @@ def get_lower_software_list():
     """
     Get list of all available software names in lowercase
     """
-    logging.info(f"Retrieving lowercase software list from {FS_URL}")
-    response = requests.get(FS_URL)
+    logging.info(f"Retrieving lowercase software list")
+    response = requests.get(ADA_URL)
     lower_software = []
     if response.status_code == 200:
         software_list = get_software_file()
@@ -235,7 +240,7 @@ def get_lower_software_list():
             count += 1
 
     else:
-        logging.error(f"Error: Unable to retrieve content from {FS_URL}")
+        logging.error(f"Error: Unable to retrieve content")
     return lower_software
 
 
@@ -243,8 +248,8 @@ def get_software_description(software_list):
     """
     Get a list of the descriptions of all software
     """
-    logging.info(f"Retrieving software descriptions from {FS_URL}")
-    response = requests.get(FS_URL)
+    logging.info(f"Retrieving software descriptions")
+    response = requests.get(ADA_URL)
     descriptions = []
     software_file = get_software_file()
     if response.status_code == 200:
@@ -255,7 +260,7 @@ def get_software_description(software_list):
             name_count += 1
 
     else:
-        logging.error(f"Error: Unable to retrieve content from {FS_URL}")
+        logging.error(f"Error: Unable to retrieve content")
     return descriptions
 
 
@@ -292,20 +297,18 @@ def get_all_versions_of_software(software):
     """
     logging.info(f"Getting list of all available versions of {software}")
     versions = []
-    response = requests.get(FS_URL + f"/{software}")
-    if response.status_code == 200:
-        software_list = get_software_file()
-        name_count = 0
-        version_count = 0
-        for software_name in software_list:
-            if software_list[name_count]["name"] == software:
-                software_versions = software_list[name_count]["variants"]
-                for software_version in software_versions:
-                    versions.append(
-                        software_list[name_count]["variants"][version_count]["version"]
-                    )
-                    version_count += 1
-            name_count += 1
+    software_list = get_software_file()
+    name_count = 0
+    version_count = 0
+    for software_name in software_list:
+        if software_list[name_count]["name"] == software:
+            software_versions = software_list[name_count]["variants"]
+            for software_version in software_versions:
+                versions.append(
+                    software_list[name_count]["variants"][version_count]["version"]
+                )
+                version_count += 1
+        name_count += 1
     return versions
 
 
@@ -331,7 +334,7 @@ def get_software_file():
     """
     try:
         file = open("./software_db.txt", "w")
-        with urllib.request.urlopen("https://ada.stfc.ac.uk/software_db") as url:
+        with urllib.request.urlopen(ADA_URL) as url:
             software = json.load(url)
         file.write(json.dumps(software, indent=4))
         file.close()
@@ -347,7 +350,7 @@ def write_software_file():
     Write the contents of the Software database, from Ada, to a file, this is to be used as a backup incase the url cannot be accessed later
     """
     file = open("./software_db.txt", "w")
-    with urllib.request.urlopen("https://ada.stfc.ac.uk/software_db") as url:
+    with urllib.request.urlopen(ADA_URL) as url:
         software = json.load(url)
     file.write(json.dumps(software, indent=4))
     file.close()
