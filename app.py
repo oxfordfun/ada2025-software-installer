@@ -124,7 +124,6 @@ def download(software_name, software_version):
         name_count += 1
 
     logging.info(f"Downloading {software_name} {software_version}")
-    source_url = flask.request.args.get("source_url") or "index"
 
     # get software
     path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
@@ -145,10 +144,7 @@ def download(software_name, software_version):
     logging.info(cmd)
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
-    if source_url == "versions":
-        return flask.redirect(flask.url_for(source_url, software_name=software_name))
-    else:
-        return flask.redirect(flask.url_for(source_url))
+    return flask.redirect(flask.url_for("index"))
 
 
 @cached(cache=TTLCache(maxsize=1, ttl=60))
