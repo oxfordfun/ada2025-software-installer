@@ -179,6 +179,9 @@ def download(software_name, software_version):
             f"{software_name} is being downloaded. Please allow some time for this download to complete."
         )
 
+        cmd = f"sudo apt install {software_name.lower()}"
+        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+
         cmd = f"sudo apt-get {software_name.lower()}"
         threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
