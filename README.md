@@ -22,4 +22,4 @@ DL_PATH # defaults to /home/ubuntu/Downloads/
 ```
 
 ## JSON file
-A JSON file has been created in the file server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, descriptions of the software, all available versions of the software and associated files that are needed for the installation of the software. This information is also stored in the Ada database for Software, this data is loaded from the database for use in the Ada Software Installer.
+A JSON file has been created in the file server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, descriptions of the software, all available versions of the software and associated files that are needed for the installation of the software. This information is also stored in the Ada database for Software, this data is loaded from the database for use in the Ada2025 Software Installer.
