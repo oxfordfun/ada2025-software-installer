@@ -143,10 +143,8 @@ def download(software_name, software_version):
                         icon_file = software_file[name_count]["variants"][
                             version_count
                         ]["icon_file"]
-                        software_type = "apptainer"
                     version_count += 1
-            else:
-                software_type = "apt"
+            software_type = software_file[name_count]["type"]
         name_count += 1
 
     if software_type == "apptainer":
