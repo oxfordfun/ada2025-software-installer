@@ -155,12 +155,16 @@ def get_software_info():
     logging.info(f"Getting info for all available software.")
     software_list = get_software_list()
     version_list = get_all_latest_software_versions(software_list)
-    lower_name = get_lower_software_list()
     description_list = get_software_description(software_list)
     software_info = []
     for i in range(0, len(software_list)):
         software_info.append(
-            [software_list[i], version_list[i], lower_name[i], description_list[i]]
+            [
+                software_list[i],
+                version_list[i],
+                software_list[i].lower(),
+                description_list[i],
+            ]
         )
     return software_info
 
@@ -215,21 +219,6 @@ def get_software_list():
         count += 1
 
     return softwares
-
-
-def get_lower_software_list():
-    """
-    Get list of all available software names in lowercase
-    """
-    logging.info(f"Retrieving lowercase software list")
-    lower_software = []
-    software_list = get_software_file()
-    count = 0
-    for software_name in software_list:
-        lower_software.append(software_list[count]["name"].lower())
-        count += 1
-
-    return lower_software
 
 
 def get_software_description(software_list):
