@@ -9,9 +9,6 @@
     python3 -m venv env
     source env/bin/activate
     pip3 install -r requirements.txt
-    cp ada2025-software-installer.desktop /home/ubuntu/Desktop/ # or wherever your desktop is (OPTIONAL STEP)
-    chown ubuntu /home/ubuntu/Desktop/ada2025-software-installer.desktop # or whatever your user is (OPTIONAL STEP)
-    chmod +x /home/ubuntu/Desktop/ada2025-software-installer.desktop # (OPTIONAL STEP)
     exit
 
 ## Optional configuration
@@ -21,9 +18,8 @@ You can also set the following optional environment variables to further configu
 HOST # defaults to 127.0.0.1
 PORT # defaults to 7322
 DEBUG # set to "True" in order to enable debug mode
-FS_URL # defaults to https://ada-files.oxfordfun.com/software/containers/
 DL_PATH # defaults to /home/ubuntu/Downloads/
 ```
 
 ## JSON file
-A JSON file has been created in the file server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, descriptions of the software, all available versions of the software and associated files that are needed for the installation of the software. The JSON file is loaded into the python program and the names and versions are extraced from it to create two lists, one for the names of the software and one for the versions of each piece of software.
+A JSON file has been created in the file server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, descriptions of the software, all available versions of the software and associated files that are needed for the installation of the software. This information is also stored in the Ada database for Software, this data is loaded from the database for use in the Ada Software Installer.
