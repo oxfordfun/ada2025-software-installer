@@ -135,7 +135,7 @@ def download(software_name, software_version):
 
     # get desktop item
     path = f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
-    cmd = f"wget -O {path} {desktop_file} && chmod +x {path}"
+    cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     # get icon
