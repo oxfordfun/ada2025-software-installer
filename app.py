@@ -62,6 +62,28 @@ def index():
     )
 
 
+@app.route("/ubuntu_packages")
+def ubuntu_packages():
+    """
+    Only lists ubuntu packages
+    """
+    software_info = get_ubuntu_packages()
+    return flask.render_template(
+        "app.jinja2", software_info=software_info, title="Ubuntu Packages"
+    )
+
+
+@app.route("/apptainer_software")
+def apptainer_software():
+    """
+    Only lists software that are apptainers
+    """
+    software_info = get_apptainer_software()
+    return flask.render_template(
+        "app.jinja2", software_info=software_info, title="Apptainer Software"
+    )
+
+
 @app.route("/search")
 def search():
     """
@@ -105,44 +127,60 @@ def download(software_name, software_version):
     name_count = 0
     for name in software_file:
         if software_file[name_count]["name"] == software_name:
-            version_count = 0
-            for version in software_file[name_count]["variants"]:
-                if (
-                    software_file[name_count]["variants"][version_count]["version"]
-                    == software_version
-                ):
-                    apptainer_file = software_file[name_count]["variants"][
-                        version_count
-                    ]["apptainer_file"]
-                    desktop_file = software_file[name_count]["variants"][version_count][
-                        "desktop_file"
-                    ]
-                    icon_file = software_file[name_count]["variants"][version_count][
-                        "icon_file"
-                    ]
-                version_count += 1
+            if software_file[name_count]["type"] == "apptainer":
+                version_count = 0
+                for version in software_file[name_count]["variants"]:
+                    if (
+                        software_file[name_count]["variants"][version_count]["version"]
+                        == software_version
+                    ):
+                        apptainer_file = software_file[name_count]["variants"][
+                            version_count
+                        ]["apptainer_file"]
+                        desktop_file = software_file[name_count]["variants"][
+                            version_count
+                        ]["desktop_file"]
+                        icon_file = software_file[name_count]["variants"][
+                            version_count
+                        ]["icon_file"]
+                        software_type = "apptainer"
+                    version_count += 1
+            else:
+                software_type = "apt"
         name_count += 1
 
-    logging.info(f"Downloading {software_name} {software_version}")
+    if software_type == "apptainer":
+        logging.info(f"Downloading {software_name} {software_version}")
 
-    # get software
-    path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
-    cmd = f"wget -O {path} {apptainer_file} && chmod +x {path}"
-    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
-    flask.flash(
-        f"{software_name} {software_version} is being downloaded to {path}. Please allow for some time for this download to complete."
-    )
+        # get software
+        path = f"{DL_PATH}{software_name.lower()}_{software_version}.sif"
+        cmd = f"wget -O {path} {apptainer_file} && chmod +x {path}"
+        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+        flask.flash(
+            f"{software_name} {software_version} is being downloaded to {path}. Please allow some time for this download to complete."
+        )
 
-    # get desktop item
-    path = f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
-    cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
-    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+        # get desktop item
+        path = (
+            f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
+        )
+        cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
+        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
-    # get icon
-    path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
-    cmd = f"sudo wget -O {path} {icon_file}"
-    logging.info(cmd)
-    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+        # get icon
+        path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
+        cmd = f"sudo wget -O {path} {icon_file}"
+        logging.info(cmd)
+        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+
+    elif software_type == "apt":
+        logging.info(f"Downloading {software_name}")
+        flask.flash(
+            f"{software_name} is being downloaded. Please allow some time for this download to complete."
+        )
+
+        cmd = f"sudo apt-get {software_name.lower()}"
+        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     return flask.redirect(flask.url_for("index"))
 
@@ -167,6 +205,62 @@ def get_software_info():
             ]
         )
     return software_info
+
+
+@cached(cache=TTLCache(maxsize=1, ttl=60))
+def get_ubuntu_packages():
+    ubuntu_packages = []
+    software_list = get_software_file()
+    name_count = 0
+
+    for software in software_list:
+        if software_list[name_count]["type"] == "apt":
+            ubuntu_packages.append(software_list[name_count]["name"])
+        name_count += 1
+
+    version_list = get_all_latest_software_versions(ubuntu_packages)
+    description_list = get_software_description(ubuntu_packages)
+    software_list = []
+
+    for i in range(0, len(ubuntu_packages)):
+        software_list.append(
+            [
+                ubuntu_packages[i],
+                version_list[i],
+                ubuntu_packages[i].lower(),
+                description_list[i],
+            ]
+        )
+
+    return software_list
+
+
+@cached(cache=TTLCache(maxsize=1, ttl=60))
+def get_apptainer_software():
+    apptainer_software = []
+    software_list = get_software_file()
+    name_count = 0
+
+    for software in software_list:
+        if software_list[name_count]["type"] == "apptainer":
+            apptainer_software.append(software_list[name_count]["name"])
+        name_count += 1
+
+    version_list = get_all_latest_software_versions(apptainer_software)
+    description_list = get_software_description(apptainer_software)
+    software_list = []
+
+    for i in range(0, len(apptainer_software)):
+        software_list.append(
+            [
+                apptainer_software[i],
+                version_list[i],
+                apptainer_software[i].lower(),
+                description_list[i],
+            ]
+        )
+
+    return software_list
 
 
 def get_searched_software_info(search_term):

@@ -8,6 +8,18 @@
         </form>
         <br/>
 
+        <div>
+            <a href="/">
+                <button class="w3-small w3-padding ada-blue w3-button w3-round"><b>All Software</b></button>
+            </a>
+            <a href="/ubuntu_packages">
+                <button class="w3-small w3-padding ada-blue w3-button w3-round"><b>Ubuntu Packages</b></button>
+            </a>
+            <a href="/apptainer_software">
+                <button class="w3-small w3-padding ada-blue w3-button w3-round"><b>Apptainer Software</b></button>
+            </a>
+        </div>
+
         <!-- Flashed messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
