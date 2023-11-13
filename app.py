@@ -212,6 +212,9 @@ def get_software_info():
 
 @cached(cache=TTLCache(maxsize=1, ttl=60))
 def get_ubuntu_packages():
+    """
+    Get list of ubuntu packages
+    """
     ubuntu_packages = []
     software_list = get_software_file()
     name_count = 0
@@ -240,6 +243,9 @@ def get_ubuntu_packages():
 
 @cached(cache=TTLCache(maxsize=1, ttl=60))
 def get_apptainer_software():
+    """
+    Get list of apptainer software
+    """
     apptainer_software = []
     software_list = get_software_file()
     name_count = 0
