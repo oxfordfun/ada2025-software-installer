@@ -20,5 +20,5 @@ PORT # defaults to 7322
 DEBUG # set to "True" in order to enable debug mode
 ```
 
-## JSON file
-A JSON file has been created in the file server named "software.json", it is located in the "/var/www/html/ada-software-files/containers" directory. This holds the hiearchy of files that contain the software names, descriptions of the software, all available versions of the software and associated files that are needed for the installation of the software. This information is also stored in the Ada database for Software, this data is loaded from the database for use in the Ada2025 Software Installer.
+## Retrieving the software
+The software is stored on the file server, all of the software directories can be found in the "/var/www/html/ada-software-files/containers/" directory. The URL for each piece of software is stored in the Ada database in the "Software" table. This data is then read and outputted into a JSON format by Ada, which is then read by the Ada2025 Software Installer in order to display the information about the software as well as downloading the software.
