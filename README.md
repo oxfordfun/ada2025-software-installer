@@ -18,7 +18,6 @@ You can also set the following optional environment variables to further configu
 HOST # defaults to 127.0.0.1
 PORT # defaults to 7322
 DEBUG # set to "True" in order to enable debug mode
-DL_PATH # defaults to /home/ubuntu/Downloads/
 ```
 
 ## JSON file
