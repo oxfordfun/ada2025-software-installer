@@ -30,9 +30,7 @@ def str_to_bool(str):
 HOST = os.getenv("ADA2025_SI_HOST") or "127.0.0.1"
 PORT = os.getenv("ADA2025_SI_PORT") or 7322
 DEBUG = str_to_bool(os.getenv("ADA2025_SI_DEBUG"))
-DL_PATH = (
-    os.getenv("ADA2025_SI_DL_PATH") or "/home/ubuntu/Downloads/"
-)  # make sure this ends in a "/"
+DL_PATH = "/home/ubuntu/Downloads/"  # make sure this ends in a "/"
 ADA_URL = "https://ada.stfc.ac.uk/software_db"
 
 
