@@ -125,23 +125,23 @@ def download(software_name, software_version):
     name_count = 0
     for name in software_file:
         if software_file[name_count]["name"] == software_name:
-            if software_file[name_count]["type"] == "apptainer":
-                version_count = 0
-                for version in software_file[name_count]["variants"]:
-                    if (
-                        software_file[name_count]["variants"][version_count]["version"]
-                        == software_version
-                    ):
+            version_count = 0
+            for version in software_file[name_count]["variants"]:
+                if (
+                    software_file[name_count]["variants"][version_count]["version"]
+                    == software_version
+                ):
+                    if software_file[name_count]["type"] == "apptainer":
                         apptainer_file = software_file[name_count]["variants"][
                             version_count
                         ]["apptainer_file"]
-                        desktop_file = software_file[name_count]["variants"][
-                            version_count
-                        ]["desktop_file"]
-                        icon_file = software_file[name_count]["variants"][
-                            version_count
-                        ]["icon_file"]
-                    version_count += 1
+                    desktop_file = software_file[name_count]["variants"][
+                        version_count
+                    ]["desktop_file"]
+                    icon_file = software_file[name_count]["variants"][
+                        version_count
+                    ]["icon_file"]
+                version_count += 1
             software_type = software_file[name_count]["type"]
         name_count += 1
 
@@ -155,31 +155,28 @@ def download(software_name, software_version):
         flask.flash(
             f"{software_name} {software_version} is being downloaded to {path}. Please allow some time for this download to complete."
         )
-
-        # get desktop item
-        path = (
-            f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
-        )
-        cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
-        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
-
-        # get icon
-        path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
-        cmd = f"sudo wget -O {path} {icon_file}"
-        logging.info(cmd)
-        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
-
     elif software_type == "apt":
         logging.info(f"Downloading {software_name}")
         flask.flash(
             f"{software_name} is being downloaded. Please allow some time for this download to complete."
         )
 
-        cmd = f"sudo apt install {software_name.lower()}"
+        # Install software
+        cmd = f"sudo apt -y install {software_name.lower()}"
         threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
-        cmd = f"sudo apt-get {software_name.lower()}"
-        threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+    # get desktop item
+    path = (
+        f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
+    )
+    cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
+    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
+
+    # get icon
+    path = f"/usr/share/pixmaps/{software_name.lower()}_icon.png"
+    cmd = f"sudo wget -O {path} {icon_file}"
+    logging.info(cmd)
+    threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     return flask.redirect(flask.url_for("index"))
 
