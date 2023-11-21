@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ADA 2025 Software Installer
+Comment=Install software containers on your machine
+Exec=/home/ubuntu/ada2025-software-installer/env/bin/python /home/ubuntu/ada2025-software-installer/app.py
+Icon=/home/ubuntu/ada2025-software-installer/static/ada.png
+Terminal=false
+Type=Application
+Categories=Utility;
+Path=~
+StartupNotify=false
