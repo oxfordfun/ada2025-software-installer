@@ -135,12 +135,12 @@ def download(software_name, software_version):
                         apptainer_file = software_file[name_count]["variants"][
                             version_count
                         ]["apptainer_file"]
-                    desktop_file = software_file[name_count]["variants"][
-                        version_count
-                    ]["desktop_file"]
-                    icon_file = software_file[name_count]["variants"][
-                        version_count
-                    ]["icon_file"]
+                    desktop_file = software_file[name_count]["variants"][version_count][
+                        "desktop_file"
+                    ]
+                    icon_file = software_file[name_count]["variants"][version_count][
+                        "icon_file"
+                    ]
                 version_count += 1
             software_type = software_file[name_count]["type"]
         name_count += 1
@@ -166,9 +166,7 @@ def download(software_name, software_version):
         threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
     # get desktop item
-    path = (
-        f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
-    )
+    path = f"/home/ubuntu/Desktop/{software_name.lower()}_{software_version}.desktop"
     cmd = f"wget -O {path} {desktop_file} && chmod +x {path} && chown ubuntu {path}"
     threading.Thread(target=run_term_cmd, args=(cmd,)).start()
 
